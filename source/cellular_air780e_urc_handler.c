@@ -36,7 +36,7 @@
 #include "cellular_common.h"
 #include "cellular_common_api.h"
 #include "cellular_common_portable.h"
-#include "cellular_ec800.h"
+#include "cellular_air780e.h"
 
 /*-----------------------------------------------------------*/
 

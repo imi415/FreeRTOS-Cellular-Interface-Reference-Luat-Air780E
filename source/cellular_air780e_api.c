@@ -38,7 +38,7 @@
 #include "cellular_common_api.h"
 #include "cellular_common.h"
 #include "cellular_at_core.h"
-#include "cellular_ec800.h"
+#include "cellular_air780e.h"
 
 /*-----------------------------------------------------------*/
 
@@ -1767,7 +1767,7 @@ static CellularPktStatus_t _Cellular_RecvFuncGetPsmSettings( CellularContext_t *
 /* This function returns the start of the data stream in ppDataStart and length in
  * pDataLength. ppDataStart should indicate the memory address within pLine[ 0 ] ~ pLine[ lineLength ]
  *
- * Example EC800 QIRD AT command response:
+ * Example AIR780E QIRD AT command response:
  * => AT+QIRD=0,15000\r\n
  * <= +QIRD: 5\r\n
  * <= test1\r\n
@@ -1833,7 +1833,7 @@ static CellularPktStatus_t socketRecvDataPrefix( void * pCallbackContext,
                 }
             }
 
-            /* EC800 expects a complete line to be received then the data stream. The
+            /* AIR780E expects a complete line to be received then the data stream. The
              * input buffer doesn't contain a complete line. */
             if( i == localLineLength )
             {
@@ -2695,7 +2695,7 @@ CellularError_t Cellular_SocketRecv( CellularHandle_t cellularHandle,
             }
         }
 
-        #if ( CELLULAR_EC800_SUPPPORT_DIRECT_PUSH_SOCKET == 1 )
+        #if ( CELLULAR_AIR780E_SUPPPORT_DIRECT_PUSH_SOCKET == 1 )
             else if( socketHandle->dataMode == CELLULAR_ACCESSMODE_DIRECT_PUSH )
             {
                 /* Socket data is returned in URC with direct push mode and store in
@@ -2738,7 +2738,7 @@ CellularError_t Cellular_SocketRecv( CellularHandle_t cellularHandle,
                     PlatformMutex_Unlock( &pModuleContext->contextMutex );
                 }
             }
-        #endif /* CELLULAR_EC800_SUPPPORT_DIRECT_PUSH_SOCKET. */
+        #endif /* CELLULAR_AIR780E_SUPPPORT_DIRECT_PUSH_SOCKET. */
         else
         {
             LogError( ( "storeAccessModeAndAddress, Access mode not supported %d.",

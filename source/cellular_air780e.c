@@ -32,13 +32,12 @@
 #include "cellular_config_defaults.h"
 #include "cellular_common.h"
 #include "cellular_common_portable.h"
-#include "cellular_ec800.h"
+#include "cellular_air780e.h"
 
 /*-----------------------------------------------------------*/
 
 #define ENBABLE_MODULE_UE_RETRY_COUNT      ( 3U )
 #define ENBABLE_MODULE_UE_RETRY_TIMEOUT    ( 5000U )
-#define EC800_NWSCANSEQ_CMD_MAX_SIZE       ( 29U ) /* The length of AT+QCFG="nwscanseq",020301,1\0. */
 
 /*-----------------------------------------------------------*/
 
@@ -135,15 +134,15 @@ CellularError_t Cellular_ModuleInit( const CellularContext_t * pContext,
             }
         }
 
-        #if ( CELLULAR_EC800_SUPPPORT_DIRECT_PUSH_SOCKET == 1 )
+        #if ( CELLULAR_AIR780E_SUPPPORT_DIRECT_PUSH_SOCKET == 1 )
         {
             /* Register the URC data callback. */
             if( cellularStatus == CELLULAR_SUCCESS )
             {
-                cellularStatus = _Cellular_RegisterInputBufferCallback( pContext, Cellular_EC800InputBufferCallback, pContext );
+                cellularStatus = _Cellular_RegisterInputBufferCallback( pContext, Cellular_AIR780EInputBufferCallback, pContext );
             }
         }
-        #endif /* CELLULAR_EC800_SUPPPORT_DIRECT_PUSH_SOCKET. */
+        #endif /* CELLULAR_AIR780E_SUPPPORT_DIRECT_PUSH_SOCKET. */
     }
 
     return cellularStatus;
@@ -216,17 +215,6 @@ CellularError_t Cellular_ModuleEnableUE( CellularContext_t * pContext )
                 cellularStatus = sendAtCommandWithRetryTimeout( pContext, &atReqGetNoResult );
             }
         #endif
-
-        if( cellularStatus == CELLULAR_SUCCESS )
-        {
-            /* Setting URC output port. */
-            #if defined( CELLULAR_EC800_URC_PORT_USBAT ) || defined( EC800_URC_PORT_USBAT )
-                atReqGetNoResult.pAtCmd = "AT+QURCCFG=\"urcport\",\"usbat\"";
-            #else
-                atReqGetNoResult.pAtCmd = "AT+QURCCFG=\"urcport\",\"uart1\"";
-            #endif
-            cellularStatus = sendAtCommandWithRetryTimeout( pContext, &atReqGetNoResult );
-        }
 
         if( cellularStatus == CELLULAR_SUCCESS )
         {
